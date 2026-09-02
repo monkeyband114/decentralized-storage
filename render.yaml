@@ -1,0 +1,82 @@
+# Render blueprint for the backend API.
+#
+# Render runs a normal, long-lived Node process, which is what this API needs:
+# uploads are not capped at a few megabytes, and a request can wait for a
+# blockchain transaction to confirm without hitting a serverless timeout.
+#
+# To use it: push this repository to GitHub, then in the Render dashboard choose
+# "New > Blueprint" and point it at the repository. Every value marked sync:false
+# must be filled in by hand in the dashboard - those are the secrets, and they
+# must never be committed.
+services:
+  - type: web
+    name: securechain-api
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+
+      # --- Database -------------------------------------------------------
+      # MongoDB Atlas connection string, including the database name.
+      - key: MONGODB_URI
+        sync: false
+
+      # --- Authentication -------------------------------------------------
+      # Render generates a strong random value for this on first deploy.
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 2h
+      - key: BCRYPT_ROUNDS
+        value: "10"
+
+      # --- File encryption ------------------------------------------------
+      # 64 hex characters. Generate it yourself and paste it in:
+      #   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+      # Losing or changing this makes every already-stored file undecryptable.
+      - key: ENCRYPTION_KEY
+        sync: false
+
+      # --- Decentralized storage -----------------------------------------
+      - key: IPFS_PROVIDER
+        value: pinata
+      - key: PINATA_JWT
+        sync: false
+      - key: PINATA_GATEWAY
+        value: https://gateway.pinata.cloud
+      # There is no persistent disk here, so the on-disk fallback is disabled.
+      - key: IPFS_ALLOW_LOCAL_FALLBACK
+        value: "false"
+
+      # --- Blockchain -----------------------------------------------------
+      # Sepolia RPC endpoint (Alchemy or Infura).
+      - key: BLOCKCHAIN_RPC_URL
+        sync: false
+      # Address printed by `npm run deploy:sepolia`.
+      - key: CONTRACT_ADDRESS
+        sync: false
+      # Private 12-word phrase the per-user wallets are derived from.
+      # The API refuses to start if this is left as the public test phrase.
+      - key: WALLET_MNEMONIC
+        sync: false
+      # Small amounts: Sepolia test ether comes from a rate-limited faucet.
+      - key: WALLET_MIN_BALANCE_ETH
+        value: "0.002"
+      - key: WALLET_TOP_UP_ETH
+        value: "0.01"
+      - key: TX_CONFIRMATIONS
+        value: "1"
+
+      # --- Application ----------------------------------------------------
+      # Comma-separated list of allowed frontend origins, no trailing slash.
+      - key: CLIENT_URL
+        sync: false
+      - key: MAX_FILE_SIZE_MB
+        value: "10"
+      - key: ALLOW_TAMPER_SIMULATION
+        value: "true"

@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+
+# Secrets - never commit these
+.env
+.env.local
+*.env
+!.env.example
+
+# Build output
+dist/
+build/
+
+# Blockchain build artefacts
+blockchain/artifacts/
+blockchain/cache/
+blockchain/deployments/
+
+# NOTE: backend/src/config/contract.json is deliberately NOT ignored.
+# It holds the contract address and ABI - no secrets - and the deployed API
+# needs it at runtime to talk to the contract.
+
+# Local development storage fallback
+backend/.ipfs-local/
+
+# Logs and OS files
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/

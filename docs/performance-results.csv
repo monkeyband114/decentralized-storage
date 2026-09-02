@@ -1,0 +1,7 @@
+All values in milliseconds
+File size,Upload total,Hash,Encrypt,IPFS upload,Blockchain tx,Retrieval,Verification
+100 KB,309,0,1,68,211,103,97
+500 KB,325,1,1,74,218,106,111
+1 MB,346,2,3,117,202,146,112
+5 MB,549,7,16,264,197,255,192
+10 MB,625,15,25,293,212,399,309

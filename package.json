@@ -1,0 +1,30 @@
+{
+  "name": "decentralized-storage",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A decentralized storage system that preserves data integrity and enforces access control",
+  "scripts": {
+    "install:all": "npm --prefix blockchain install && npm --prefix backend install && npm --prefix frontend install",
+    "chain": "npm --prefix blockchain run node",
+    "compile": "npm --prefix blockchain run compile",
+    "deploy": "npm --prefix blockchain run deploy",
+    "backend": "npm --prefix backend run dev",
+    "frontend": "npm --prefix frontend run dev",
+    "seed": "npm --prefix backend run seed",
+    "performance": "npm --prefix backend run performance",
+    "test": "npm --prefix blockchain test && npm --prefix backend test",
+    "test:contract": "npm --prefix blockchain test",
+    "test:api": "npm --prefix backend test",
+    "build": "npm --prefix frontend run build"
+  },
+  "keywords": [
+    "blockchain",
+    "ipfs",
+    "ethereum",
+    "solidity",
+    "data-integrity",
+    "access-control",
+    "decentralized-storage"
+  ],
+  "license": "MIT"
+}
